@@ -31,10 +31,10 @@ function PageNavbar() {
           isActive={activeItem === "classmember"}
         />
         <NavItem
-          endPoint={"/nilai"}
+          endPoint={"/score"}
           icon={"grade"}
           name={"Nilai"}
-          isActive={activeItem === "nilai"}
+          isActive={activeItem === "score"}
         />
         <NavItem
           endPoint={"/rapor"}

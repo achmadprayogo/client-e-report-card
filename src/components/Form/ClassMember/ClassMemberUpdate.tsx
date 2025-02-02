@@ -11,6 +11,7 @@ import NotFoundError from "../../NotFoundError/NotFoundError";
 import Loading from "../../Loading/Loading";
 import ErrorServer from "../../ErrorServer/ErrorServer";
 import { patchData } from "../../../../fetcher";
+import { useNavigate } from "react-router";
 
 function ClassMemberUpdate() {
   const classMemberId: string = window.location.search.split("=")[1];
@@ -24,6 +25,7 @@ function ClassMemberUpdate() {
   const [classNameOptions, setClassNameOptions] = useState<Options[]>(initialOptions);
   const [studentStatusOptions, setStudentStatusOptions] = useState<Options[]>(initialOptions);
   const [homeroomTeacher, setHomeroomTeacher] = useState<string>("Belum Ada Data");
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getClassMemberData() {
@@ -144,7 +146,7 @@ function ClassMemberUpdate() {
 
   const handleDelete = async () => {
     setAlert(Helper.closeAlert());
-    // navigate to delete page
+    navigate(`/classmember/delete?id=${classMemberId}`);
   }
 
   const handleAlertClose = () => {

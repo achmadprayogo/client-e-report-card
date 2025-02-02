@@ -22,7 +22,7 @@ import ErrorServer from "../ErrorServer/ErrorServer";
 import Helper from "../../../Helper";
 import OptionsInput from "../Form/OptionsInput";
 
-function TableClassName() {
+function TableClassMember() {
   const [classMemeber, setClassMember] = useState<ClassMember[]>([]);
   const [statusResponse, setStatusResponse] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -307,4 +307,4 @@ function TableClassName() {
   );
 }
 
-export default TableClassName;
+export default TableClassMember;
