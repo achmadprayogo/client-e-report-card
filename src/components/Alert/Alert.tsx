@@ -14,6 +14,7 @@ export default function Alert({
   message,
   onClose,
 }: AlertProps) {
+
   useEffect(() => {
     setTimeout(() => {
       onClose();
@@ -40,7 +41,7 @@ export default function Alert({
       }`}
     >
       <span className="material-symbols-outlined p-2">
-        {status === "success" ? "check" : status === "error" ? "error" : ""}
+        {alertStatus === "success" ? "check" : alertStatus === "error" ? "error" : ""}
       </span>
       <div>
         <p>{message}</p>

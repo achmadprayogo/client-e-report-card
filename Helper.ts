@@ -57,7 +57,15 @@ export default class Helper {
     }
 
     const academicYears = this.setOptions(result.data, "academic_year");
-    return [{ label: "Pilih Tahun Ajaran", value: "" }, ...academicYears];
+    return [
+      {
+        label: "Pilih Tahun Ajaran",
+        value: "",
+        selected: true,
+        disabled: true,
+      },
+      ...academicYears,
+    ];
   }
 
   static async getGradeOptions(academicyearId: string) {
@@ -68,7 +76,10 @@ export default class Helper {
     }
 
     const grades = this.setOptions(result.data, "grade_class");
-    return [{ label: "Pilih Tingkat", value: "" }, ...grades];
+    return [
+      { label: "Pilih Tingkat", value: "", selected: true, disabled: true },
+      ...grades,
+    ];
   }
 
   static async getClassNameOptions(gradeId: string) {
@@ -79,7 +90,10 @@ export default class Helper {
     }
 
     const classes = this.setOptions(result.data, "class_name");
-    return [{ label: "Pilih Kelas", value: "" }, ...classes];
+    return [
+      { label: "Pilih Kelas", value: "", selected: true, disabled: true },
+      ...classes,
+    ];
   }
 
   static async getHomeroomTeacher(classId: string) {
@@ -141,9 +155,13 @@ export default class Helper {
       mother_name: relationships.student.mother_name,
       guardian_name: relationships.student.guardian_name,
       address: relationships.student.address,
+      academic_year_id:
+        classNameRelationships.grade_class.relationships.academic_year.id,
       academic_year: classNameRelationships.grade_class.relationships.academic_year.academic_year, // prettier-ignore
       student_status: data.attributes.student_status as StudentStatus,
+      grade_class_id: classNameRelationships.grade_class.id,
       grade_class: classNameRelationships.grade_class.grade_class,
+      class_name_id: relationships.class_name.id,
       class_name: relationships.class_name.class_name,
       homeroom_teacher: relationships.class_name.homeroom_teacher,
     };

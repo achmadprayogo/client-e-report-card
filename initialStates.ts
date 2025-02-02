@@ -1,5 +1,5 @@
 import Helper from "./Helper";
-import { AlertStatus, DataFetch } from "./index";
+import { AlertStatus, ClassMember, DataFetch, StudentStatus } from "./index";
 
 export const initialDataFetch: DataFetch = {
   data: [],
@@ -38,6 +38,26 @@ export const initialStudentData = {
   address: "",
 };
 
+export const initialClassMember: ClassMember = {
+  id: "",
+  nis: "",
+  fullname: "",
+  city_of_birth: "",
+  birthdate: "",
+  father_name: "",
+  mother_name: "",
+  guardian_name: "",
+  address: "",
+  academic_year_id: "",
+  academic_year: "",
+  student_status: StudentStatus.ACTIVE,
+  grade_class_id: "",
+  grade_class: "",
+  class_name_id: "",
+  class_name: "",
+  homeroom_teacher: "",
+};
+
 export const initialFormInputStudent = {
   nis: "",
   fullname: "",
@@ -72,7 +92,7 @@ export const initialAcademicYearOptions = async () => {
 };
 
 export const statusOptions = [
-  { label: "Pilih Status", icon: "manage_accounts", value: "" },
+  { label: "Pilih Status", icon: "manage_accounts", value: "", selected: true, disabled: true },
   { label: "Aktif", icon: "check_circle", value: "active" },
   { label: "Lulus", icon: "school", value: "graduate" },
   { label: "Boyong", icon: "do_not_disturb_on", value: "dropout" },

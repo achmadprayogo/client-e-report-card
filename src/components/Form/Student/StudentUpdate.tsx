@@ -50,8 +50,8 @@ export default function StudentInput() {
   }, [studentId]);
 
   useEffect(() => {
-    const hasChanges = JSON.stringify(lastData) !== JSON.stringify(formData);
-    setIsUpdate(hasChanges);
+    const isChanged = JSON.stringify(lastData) !== JSON.stringify(formData);
+    setIsUpdate(isChanged);
   }, [formData, lastData]);
 
   const handleChange = async (

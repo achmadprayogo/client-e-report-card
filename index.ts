@@ -39,9 +39,12 @@ export interface ClassMember {
   mother_name: string;
   guardian_name: string;
   address: string;
+  academic_year_id: string;
   academic_year: string;
   student_status: StudentStatus;
+  grade_class_id: string;
   grade_class: string;
+  class_name_id: string;
   class_name: string;
   homeroom_teacher: string;
 }
@@ -99,6 +102,8 @@ export interface StudentDeleteProps {
 export interface Options {
   label: string;
   value: string;
+  selected?: boolean;
+  disabled?: boolean;
 }
 
 export interface FormUpdateStudent {

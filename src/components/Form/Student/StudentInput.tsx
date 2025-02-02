@@ -46,7 +46,7 @@ export default function StudentInput() {
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    let result;
+    let result: any;
 
     switch (name) {
       case "academic_year_id":
