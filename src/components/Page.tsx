@@ -9,6 +9,8 @@ import { Routes, Route, Outlet } from "react-router";
 import ClassMemberUpdate from "./Form/ClassMember/ClassMemberUpdate";
 import ClassMemberDelete from "./Form/ClassMember/ClassMemberDelete";
 import TableScore from "./Tables/TableScore";
+import ScoreInput from "./Form/Score/ScoreInput";
+import ScoreUpdate from "./Form/Score/ScoreUpdate";
 
 function PageLayout() {
   return (
@@ -42,6 +44,8 @@ function Page() {
       <Route path="score" element={<PageLayout />}>
         <Route index element={<TableScore />} />
         <Route path=":academic_year_id" element={<TableScore />} />
+        <Route path="input" element={<ScoreInput />} />
+        <Route path="update" element={<ScoreUpdate />} />
       </Route>
       <Route path="rapor" element={<PageLayout />}></Route>
       <Route path="setting" element={<PageLayout />}>

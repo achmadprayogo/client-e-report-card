@@ -272,9 +272,7 @@ function TableClassMember() {
                 key={member.id}
                 id={member.id}
                 className="hover:bg-gray-700"
-                onDoubleClick={(e) => {
-                  handleDoubleClick(e);
-                }}
+                onDoubleClick={handleDoubleClick}
               >
                 <TableData>{dataFetch.meta.page.from + index}</TableData>
                 <TableData>{member.academic_year}</TableData>
