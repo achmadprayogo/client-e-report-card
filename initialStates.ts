@@ -84,6 +84,28 @@ export const initialFormUpdateStudent = {
   address: "",
 };
 
+export const initialStudentScore = {
+  id: "-",
+  nis: 0,
+  fullname: "-",
+  academic_year: "-",
+  student_status: StudentStatus.ACTIVE,
+  grade_class: "-",
+  class_name: "-",
+  homeroom_teacher: "-",
+  quarter_academic_year_id: "-",
+  quarter_academic_year: "-",
+  MMC_score: 0,
+  scores: [],
+};
+
+export const initialScore = {
+  id: "-",
+  subject_id: "-",
+  subject: "-",
+  score: 0,
+};
+
 export const initialOptions = [{ label: "Belum ada data", value: "" }];
 
 export const initialAcademicYearOptions = async () => {
@@ -92,7 +114,13 @@ export const initialAcademicYearOptions = async () => {
 };
 
 export const statusOptions = [
-  { label: "Pilih Status", icon: "manage_accounts", value: "", selected: true, disabled: true },
+  {
+    label: "Pilih Status",
+    icon: "manage_accounts",
+    value: "",
+    selected: true,
+    disabled: true,
+  },
   { label: "Aktif", icon: "check_circle", value: "active" },
   { label: "Lulus", icon: "school", value: "graduate" },
   { label: "Boyong", icon: "do_not_disturb_on", value: "dropout" },

@@ -1,5 +1,11 @@
 import { getData } from "./fetcher";
-import { AlertConfig, AlertStatus } from "./index";
+import {
+  AlertConfig,
+  AlertStatus,
+  Options,
+  Score,
+  StudentScore,
+} from "./index";
 import { StudentStatus } from "./index";
 
 export default class Helper {
@@ -82,6 +88,21 @@ export default class Helper {
     ];
   }
 
+  static async getQuarterOptions(academicyearId: string) {
+    const result = await getData(
+      "/admin/quarteracademicyear/" + academicyearId
+    );
+
+    if (!result) {
+      throw new Error("Failed to fetch quarter data");
+    }
+    const quarters = this.setOptions(result.data, "quarter_academic_year");
+    return [
+      { label: "Pilih Cawu", value: "", selected: true, disabled: true },
+      ...quarters,
+    ];
+  }
+
   static async getClassNameOptions(gradeId: string) {
     const result = await getData("/api/admin/classname/" + gradeId);
 
@@ -94,6 +115,34 @@ export default class Helper {
       { label: "Pilih Kelas", value: "", selected: true, disabled: true },
       ...classes,
     ];
+  }
+
+  static setIndexOptionSelected(
+    options: Options[],
+    index: number,
+    selected: boolean
+  ) {
+    options.forEach((option, i) => {
+      if (i === index) {
+        option.selected = selected;
+      } else {
+        option.selected = !selected;
+      }
+    });
+    return options;
+  }
+
+  static setIndexOptionDisabled(
+    options: Options[],
+    index: number,
+    disabled: boolean
+  ) {
+    options.forEach((option, i) => {
+      if (i === index) {
+        option.disabled = disabled;
+      }
+    });
+    return options;
   }
 
   static async getHomeroomTeacher(classId: string) {
@@ -197,5 +246,80 @@ export default class Helper {
     }
     console.log(result);
     return this.formatClassMember(result.data);
+  }
+
+  static formatScore(data: any, included: any) {
+    if (Array.isArray(data)) {
+      const formatedData: StudentScore[] = [];
+      data.map((item: any) => {
+        const studentScore: StudentScore = this.formatScore(
+          item,
+          included
+        ) as StudentScore;
+        formatedData.push(studentScore);
+      });
+      return formatedData;
+    }
+
+    const student = included.find(
+      (item: any) => item.id === data.attributes.student_id
+    );
+    const className = included.find(
+      (item: any) => item.id === data.attributes.class_name_id
+    );
+    const gradeClass = included.find(
+      (item: any) => item.id === className.attributes.grade_class_id
+    );
+    const quarterAcademicYear = included.find(
+      (item: any) => item.id === data.attributes.quarter_academic_year_id
+    );
+    const academicYear = included.find(
+      (item: any) => item.id === data.attributes.academic_year_id
+    );
+
+    // get scores
+    const scores: Score[] = included
+      .filter((item: any) => item.type === "score")
+      .filter(
+        (item: any) =>
+          item.attributes.class_member_id === data.id &&
+          item.attributes.quarter_academic_year_id === quarterAcademicYear.id
+      )
+      .map((item: any) => ({
+        id: item.id,
+        subject_id: item.attributes.subject_id,
+        subject: included.find((i: any) => i.id === item.attributes.subject_id)
+          .attributes.subject_name,
+        score: item.attributes.score,
+      }));
+
+    const formattedData: StudentScore = {
+      id: data.id,
+      nis: student.attributes.nis,
+      fullname: student.attributes.fullname,
+      academic_year: academicYear.attributes.academic_year,
+      student_status: data.attributes.student_status,
+      grade_class: gradeClass.attributes.grade_class,
+      class_name: className.attributes.class_name,
+      homeroom_teacher: className.attributes.homeroom_teacher,
+      quarter_academic_year_id: quarterAcademicYear.id,
+      quarter_academic_year: quarterAcademicYear.attributes.quarter_academic_year, // prettier-ignore
+      MMC_score: 60,
+      scores,
+      total_score: data.attributes.total_score,
+      average_score: data.attributes.average_score,
+      rank: data.attributes.rank,
+    };
+
+    return formattedData;
+  }
+
+  static getSubjects(data: any) {
+    return data
+      .filter((item: any) => item.type === "subject")
+      .map((item: any) => ({
+        id: item.id,
+        name: item.attributes.subject_name,
+      }));
   }
 }
