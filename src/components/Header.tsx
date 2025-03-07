@@ -2,19 +2,15 @@ import Logo from "./Logo";
 import AcademicYearLabel from "./AcademicYearLabel";
 import Helper from "../../Helper";
 import { useState, useEffect } from "react";
-
-interface AcademicYear {
-  label: string;
-  value: string;
-}
+import { Options } from "../../index";
 
 function Header() {
-  const [academicYears, setAcademicYears] = useState<AcademicYear[]>([]);
+  const [academicYearOptions, setAcademicYearOptions] = useState<Options[]>([]);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await Helper.getAcademicYearOptions();
-      setAcademicYears([
+      const result: Options[] = await Helper.getAcademicYearOptions();
+      setAcademicYearOptions([
         { label: "Semua", value: "" },
         ...result.splice(1).reverse(),
       ]);
@@ -35,7 +31,7 @@ function Header() {
           Jl. Bululawang. No. 01 <span>Kec. Bululawang</span> Kab. Malang
         </p>
       </div>
-      <AcademicYearLabel options={academicYears} />
+      <AcademicYearLabel options={academicYearOptions} />
     </div>
   );
 }

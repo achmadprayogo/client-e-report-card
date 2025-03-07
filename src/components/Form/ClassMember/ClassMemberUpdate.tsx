@@ -3,10 +3,20 @@ import BackButton from "../BackButton";
 import TitleInput from "../TitleInput";
 import Alert from "../../Alert/Alert";
 import Input from "../Input";
-import { AlertConfig, AlertStatus, ClassMember, Options, StudentStatus } from "../../../../index";
+import {
+  AlertConfig,
+  ClassMember,
+  Options,
+  StudentStatus,
+} from "../../../../index";
 import { useEffect, useState } from "react";
 import Helper from "../../../../Helper";
-import { initialOptions, statusOptions, initialClassMember, initialAlert } from "../../../../initialStates";
+import {
+  initialOptions,
+  statusOptions,
+  initialClassMember,
+  initialAlert,
+} from "../../../../initialStates";
 import NotFoundError from "../../NotFoundError/NotFoundError";
 import Loading from "../../Loading/Loading";
 import ErrorServer from "../../ErrorServer/ErrorServer";
@@ -21,10 +31,14 @@ function ClassMemberUpdate() {
   const [lastData, setLastData] = useState<ClassMember>(initialClassMember);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [statusResponse, setStatusResponse] = useState<number>(0);
-  const [gradeClassOptions, setGradeClassOptions] = useState<Options[]>(initialOptions);
-  const [classNameOptions, setClassNameOptions] = useState<Options[]>(initialOptions);
-  const [studentStatusOptions, setStudentStatusOptions] = useState<Options[]>(initialOptions);
-  const [homeroomTeacher, setHomeroomTeacher] = useState<string>("Belum Ada Data");
+  const [gradeClassOptions, setGradeClassOptions] =
+    useState<Options[]>(initialOptions);
+  const [classNameOptions, setClassNameOptions] =
+    useState<Options[]>(initialOptions);
+  const [studentStatusOptions, setStudentStatusOptions] =
+    useState<Options[]>(initialOptions);
+  const [homeroomTeacher, setHomeroomTeacher] =
+    useState<string>("Belum Ada Data");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,8 +61,13 @@ function ClassMemberUpdate() {
     getClassMemberData();
     setIsLoading(false);
 
-    async function getGradeClassOptions(academicYearIdSelected: string, gradeClassIdSelected: string) {
-      const result: Options[] = await Helper.getGradeOptions(academicYearIdSelected);
+    async function getGradeClassOptions(
+      academicYearIdSelected: string,
+      gradeClassIdSelected: string
+    ) {
+      const result: Options[] = await Helper.getGradeOptions(
+        academicYearIdSelected
+      );
       const options: Options[] = result.map((result) => {
         result.selected = false;
 
@@ -62,8 +81,13 @@ function ClassMemberUpdate() {
       setGradeClassOptions(options);
     }
 
-    async function getClassNameOptions(gradeClassIdSelected: string, classNameIdSelected: string) {
-      const result: Options[] = await Helper.getClassNameOptions(gradeClassIdSelected);
+    async function getClassNameOptions(
+      gradeClassIdSelected: string,
+      classNameIdSelected: string
+    ) {
+      const result: Options[] = await Helper.getClassNameOptions(
+        gradeClassIdSelected
+      );
       const options: Options[] = result.map((result) => {
         result.selected = false;
 
@@ -88,7 +112,6 @@ function ClassMemberUpdate() {
       });
       setStudentStatusOptions(options);
     }
-    
   }, [classMemberId]);
 
   useEffect(() => {
@@ -96,7 +119,11 @@ function ClassMemberUpdate() {
     setIsUpdate(isChanged);
   }, [formData, lastData]);
 
-  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (
+    e:
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     let result: any;
 
@@ -142,12 +169,12 @@ function ClassMemberUpdate() {
         setAlert(Helper.successAlert());
       }
     }
-  }
+  };
 
   const handleDelete = async () => {
     setAlert(Helper.closeAlert());
     navigate(`/classmember/delete?id=${classMemberId}`);
-  }
+  };
 
   const handleAlertClose = () => {
     setAlert(Helper.closeAlert());
@@ -312,7 +339,9 @@ function ClassMemberUpdate() {
             <button
               type="submit"
               disabled={!isUpdate}
-              className={`${isUpdate ? `bg-green-700 hover:bg-green-600` : `bg-slate-500`} w-1/2 text-white px-4 py-2 rounded-md `}
+              className={`${
+                isUpdate ? `bg-green-700 hover:bg-green-600` : `bg-slate-500`
+              } w-1/2 text-white px-4 py-2 rounded-md `}
             >
               Update
             </button>

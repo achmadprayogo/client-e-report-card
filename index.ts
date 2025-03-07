@@ -49,6 +49,36 @@ export interface ClassMember {
   homeroom_teacher: string;
 }
 
+export interface StudentScore {
+  id: string;
+  nis: number;
+  fullname: string;
+  academic_year: string;
+  student_status: StudentStatus;
+  grade_class: string;
+  class_name: string;
+  homeroom_teacher: string;
+  quarter_academic_year_id: string;
+  quarter_academic_year: string;
+  MMC_score: number; // Minimum Completeness Criteria
+  scores: Score[];
+  total_score?: number;
+  average_score?: number;
+  rank?: number;
+}
+
+export interface Subject {
+  id: string;
+  name: string;
+}
+
+export interface Score {
+  id: string;
+  subject_id?: string;
+  subject: string;
+  score: number;
+}
+
 export enum StudentStatus {
   ACTIVE = "active",
   GRADUATE = "graduate",

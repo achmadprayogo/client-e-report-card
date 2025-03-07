@@ -4,7 +4,7 @@ function OptionsInput({ options }: { options?: Options[] }) {
     <>
       {options?.map((option, index) => (
         <option
-          key={option.value}
+          key={index + option.value}
           value={option.value}
           disabled={option.disabled}
           selected={option.selected}
