@@ -47,6 +47,8 @@ function Page() {
         <Route path="input" element={<ScoreInput />} />
         <Route path="update" element={<ScoreUpdate />} />
       </Route>
+      <Route path="attendance" element={<PageLayout />}></Route>
+      <Route path="notes" element={<PageLayout />}></Route>
       <Route path="rapor" element={<PageLayout />}></Route>
       <Route path="setting" element={<PageLayout />}>
         <Route index element={<TabelSettings />} />
