@@ -27,7 +27,6 @@ function UpdateStudentAttendance({
   );
   const [newData, setNewData] = useState<AttendanceData>(initialAttendanceData);
   const [alert, setAlert] = useState<AlertConfig>(initialAlert);
-  const [isPageRefresh, setIsPageRefresh] = useState<boolean>(false);
   const rootElement = document.getElementById("root") as HTMLElement;
 
   useEffect(() => {
@@ -58,7 +57,6 @@ function UpdateStudentAttendance({
     switch (response.status) {
       case 200:
         setAlert(Helper.successAlert());
-        setIsPageRefresh(true);
         break;
       default:
         setAlert(Helper.errorAlert());
