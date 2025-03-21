@@ -296,8 +296,8 @@ function TableClassMember() {
         </table>
       </TableContainer>
       <TablePagination
-        currentPage={dataFetch.meta.page.currentPage}
-        totalPages={dataFetch.meta.page.lastPage}
+        currentPage={dataFetch.meta.page.current_page}
+        totalPages={dataFetch.meta.page.last_page}
         onPageNext={handlePageNext}
         onPagePrev={handlePagePrev}
       />

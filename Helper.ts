@@ -97,9 +97,13 @@ export default class Helper {
       throw new Error("Failed to fetch quarter data");
     }
     const quarters = this.setOptions(result.data, "quarter_academic_year");
+    quarters.map((item: any) => {
+      item.label = "Cawu " + item.label;
+    });
     return [
       { label: "Pilih Cawu", value: "", selected: true, disabled: true },
       ...quarters,
+      { label: "Semua Cawu", value: "", selected: true, disabled: false },
     ];
   }
 
@@ -111,9 +115,13 @@ export default class Helper {
     }
 
     const classes = this.setOptions(result.data, "class_name");
+    classes.map((item: any) => {
+      item.label = "Kelas " + item.label;
+    });
     return [
       { label: "Pilih Kelas", value: "", selected: true, disabled: true },
       ...classes,
+      { label: "Semua Kelas", value: "", selected: true, disabled: false },
     ];
   }
 
@@ -214,6 +222,83 @@ export default class Helper {
       class_name: relationships.class_name.class_name,
       homeroom_teacher: relationships.class_name.homeroom_teacher,
     };
+  }
+
+  static formatNotes(data: any[], included: any[]) {
+    const result = data.map((note: any) => {
+      const classMember = included.find(
+        (item: any) => item.id === note.attributes.class_member_id
+      );
+      const student = included.find(
+        (item: any) => item.id === classMember.attributes.student_id
+      );
+      const className = included.find(
+        (item: any) => item.id === classMember.attributes.class_name_id
+      );
+      const gradeClass = included.find(
+        (item: any) => item.id === className.attributes.grade_class_id
+      );
+      const quarterAcademicYear = included.find(
+        (item: any) => item.id === note.attributes.quarter_academic_year_id
+      );
+      const academicYear = included.find(
+        (item: any) =>
+          item.id === quarterAcademicYear.attributes.academic_year_id
+      );
+      return {
+        id: note.id,
+        academic_year: academicYear.attributes.academic_year,
+        nis: student.attributes.nis,
+        fullname: student.attributes.fullname,
+        grade_class: gradeClass.attributes.grade_class,
+        class_name: className.attributes.class_name,
+        homeroom_teacher: className.attributes.homeroom_teacher,
+        quarter_academic_year:
+          quarterAcademicYear.attributes.quarter_academic_year,
+        note: note.attributes.notes,
+      };
+    });
+    return result;
+  }
+
+  static formatAttendanceData(data: any[], included: any[]) {
+    const result = data.map((attendance: any) => {
+      const classMember = included.find(
+        (item: any) => item.id === attendance.attributes.class_member_id
+      );
+      const student = included.find(
+        (item: any) => item.id === classMember.attributes.student_id
+      );
+      const className = included.find(
+        (item: any) => item.id === classMember.attributes.class_name_id
+      );
+      const gradeClass = included.find(
+        (item: any) => item.id === className.attributes.grade_class_id
+      );
+      const quarterAcademicYear = included.find(
+        (item: any) =>
+          item.id === attendance.attributes.quarter_academic_year_id
+      );
+      const academicYear = included.find(
+        (item: any) =>
+          item.id === quarterAcademicYear.attributes.academic_year_id
+      );
+      return {
+        id: attendance.id,
+        academic_year: academicYear.attributes.academic_year,
+        nis: student.attributes.nis,
+        fullname: student.attributes.fullname,
+        grade_class: gradeClass.attributes.grade_class,
+        class_name: className.attributes.class_name,
+        homeroom_teacher: className.attributes.homeroom_teacher,
+        quarter_academic_year:
+          quarterAcademicYear.attributes.quarter_academic_year,
+        total_sicks: attendance.attributes.sick,
+        total_permissions: attendance.attributes.permission,
+        total_absences: attendance.attributes.absent,
+      };
+    });
+    return result;
   }
 
   static capitalizeWords(str: string) {

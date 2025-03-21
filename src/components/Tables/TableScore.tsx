@@ -9,13 +9,7 @@ import TablePagination from "./TablePagination";
 import { useEffect, useState } from "react";
 import { getData } from "../../../fetcher";
 import { useParams } from "react-router";
-import {
-  DataFetch,
-  Options,
-  Score,
-  StudentScore,
-  Subject,
-} from "../../../index";
+import { DataFetch, Options, StudentScore, Subject } from "../../../index";
 import Helper from "../../../Helper";
 import OptionsInput from "../Form/OptionsInput";
 import { initialDataFetch } from "../../../initialStates";
@@ -32,8 +26,6 @@ function TableScore() {
   const [sortBy, setSortBy] = useState<string>("fullname");
   const [sortOrder, setSortOrder] = useState<string>("asc");
   const [search, setSearch] = useState<string>("");
-  const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(20);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [studentScores, setStudentScores] = useState<StudentScore[]>([]);
   const [responseFetch, setResponseFetch] = useState<DataFetch>(initialDataFetch); // prettier-ignore
@@ -41,7 +33,7 @@ function TableScore() {
 
   useEffect(() => {
     async function getDataScores() {
-      const pageQuery = `page[number]=${page}&page[size]=${pageSize}`;
+      const pageQuery = `page[number]=${1}&page[size]=${20}`;
       const searchQuery = `search=${search}`;
       const academicYearQuery = `filter[academic_year_id]=${academicYearSelected}`;
       const classNameQuery = `filter[class_name_id]=${className}`;
@@ -253,8 +245,8 @@ function TableScore() {
         </table>
       </TableContainer>
       <TablePagination
-        currentPage={responseFetch.meta.page.currentPage}
-        totalPages={responseFetch.meta.page.lastPage}
+        currentPage={responseFetch.meta.page.current_page}
+        totalPages={responseFetch.meta.page.last_page}
         onPageNext={handlePageNext}
         onPagePrev={handlePagePrev}
       />

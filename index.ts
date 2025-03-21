@@ -2,8 +2,8 @@ export interface DataFetch {
   data: [];
   meta: {
     page: {
-      currentPage: number;
-      lastPage: number;
+      current_page: number;
+      last_page: number;
       from: number;
       to: number;
       total: number;
@@ -77,6 +77,18 @@ export interface Score {
   subject_id?: string;
   subject: string;
   score: number;
+}
+
+export interface TeacherNote {
+  id: string;
+  academic_year: string;
+  nis: number;
+  fullname: string;
+  grade_class: string;
+  class_name: string;
+  homeroom_teacher: string;
+  quarter_academic_year: string;
+  note: string;
 }
 
 export enum StudentStatus {
@@ -159,4 +171,18 @@ export interface FormInputStudent {
   academic_year_id: string;
   status: "active" | "dropout" | "graduate";
   class_name_id: string;
+}
+
+export interface AttendanceData {
+  id: string;
+  nis: number;
+  fullname: string;
+  grade_class: string;
+  class_name: string;
+  homeroom_teacher: string;
+  academic_year: string;
+  quarter_academic_year: string;
+  total_sicks: number;
+  total_permissions: number;
+  total_absences: number;
 }

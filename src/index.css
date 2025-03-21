@@ -8,7 +8,9 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #343a40;
+  background-color: #0f0f0f;
+  /* #343a40 #1b1b1b*/
+  /* filter: blur(4px); */
 }
 
 .date-input::-webkit-calendar-picker-indicator {

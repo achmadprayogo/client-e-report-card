@@ -11,6 +11,9 @@ import ClassMemberDelete from "./Form/ClassMember/ClassMemberDelete";
 import TableScore from "./Tables/TableScore";
 import ScoreInput from "./Form/Score/ScoreInput";
 import ScoreUpdate from "./Form/Score/ScoreUpdate";
+import TableTeacherNotes from "./Tables/TableTeacherNotes";
+import TableStudentAttendance from "./Tables/TableStudentAttendance";
+import TableReportCards from "./Tables/TableReportCards";
 
 function PageLayout() {
   return (
@@ -47,9 +50,17 @@ function Page() {
         <Route path="input" element={<ScoreInput />} />
         <Route path="update" element={<ScoreUpdate />} />
       </Route>
-      <Route path="attendance" element={<PageLayout />}></Route>
-      <Route path="notes" element={<PageLayout />}></Route>
-      <Route path="rapor" element={<PageLayout />}></Route>
+      <Route path="attendance" element={<PageLayout />}>
+        <Route index element={<TableStudentAttendance />} />
+        <Route path=":academic_year_id" element={<TableStudentAttendance />} />
+      </Route>
+      <Route path="notes" element={<PageLayout />}>
+        <Route index element={<TableTeacherNotes />} />
+        <Route path=":academic_year_id" element={<TableTeacherNotes />} />
+      </Route>
+      <Route path="rapor" element={<PageLayout />}>
+        <Route index element={<TableReportCards />} />
+      </Route>
       <Route path="setting" element={<PageLayout />}>
         <Route index element={<TabelSettings />} />
       </Route>

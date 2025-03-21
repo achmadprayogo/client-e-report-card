@@ -5,8 +5,8 @@ export const initialDataFetch: DataFetch = {
   data: [],
   meta: {
     page: {
-      currentPage: 0,
-      lastPage: 0,
+      current_page: 0,
+      last_page: 0,
       from: 0,
       to: 0,
       total: 0,
@@ -125,3 +125,29 @@ export const statusOptions = [
   { label: "Lulus", icon: "school", value: "graduate" },
   { label: "Boyong", icon: "do_not_disturb_on", value: "dropout" },
 ];
+
+export const initialTeacherNote = {
+  id: "-",
+  nis: 0,
+  fullname: "-",
+  academic_year: "-",
+  grade_class: "-",
+  class_name: "-",
+  quarter_academic_year: "",
+  homeroom_teacher: "-",
+  note: "-",
+};
+
+export const initialAttendanceData = {
+  id: "-",
+  nis: 0,
+  fullname: "-",
+  grade_class: "-",
+  class_name: "-",
+  homeroom_teacher: "-",
+  academic_year: "-",
+  quarter_academic_year: "-",
+  total_sicks: 0,
+  total_permissions: 0,
+  total_absences: 0,
+};

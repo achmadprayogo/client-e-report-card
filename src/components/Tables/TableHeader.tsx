@@ -1,13 +1,21 @@
 interface TableHeaderProps {
+  id?: string;
   children: React.ReactNode;
   filter?: boolean;
   order?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLTableCellElement>) => void;
 }
 
-function TableHeader({ children, filter, onClick, order }: TableHeaderProps) {
+function TableHeader({
+  id,
+  children,
+  filter,
+  onClick,
+  order,
+}: TableHeaderProps) {
   return (
     <th
+      id={id}
       onClick={onClick}
       className="text-white p-2 font-bold border-b text-left whitespace-nowrap"
     >

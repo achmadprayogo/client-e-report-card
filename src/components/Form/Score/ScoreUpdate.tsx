@@ -7,12 +7,7 @@ import Loading from "../../Loading/Loading";
 import ErrorServer from "../../ErrorServer/ErrorServer";
 import NotFoundError from "../../NotFoundError/NotFoundError";
 import { useState, useEffect } from "react";
-import {
-  AlertConfig,
-  AlertStatus,
-  Score,
-  StudentScore,
-} from "../../../../index";
+import { AlertConfig, Score, StudentScore } from "../../../../index";
 import { getData, patchData } from "../../../../fetcher";
 import Helper from "../../../../Helper";
 import {
@@ -68,7 +63,6 @@ function ScoreUpdate() {
       subject: e.target.name.split("|")[1],
       score: parseInt(e.target.value),
     };
-    console.log(newData);
 
     const newFormData: Score[] = formData.map((score) => {
       if (score.id === newData.id) {

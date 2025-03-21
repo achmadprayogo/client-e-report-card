@@ -2,7 +2,8 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      //plugins: [require("tailwind-scrollbar")],
+    },
   },
-  plugins: [require("tailwind-scrollbar")],
 };
