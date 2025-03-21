@@ -22,7 +22,7 @@ function PageNavbar() {
 
   return (
     <div
-      className="fixed top-28 left-0 z-10 w-20 bg-[#343a40] border-x-0 border-e-2 border-s-2 border-b-2 bottom-0 hover:w-36 group transition-all duration-500 ease-in-out overflow-auto
+      className="fixed top-28 left-0 z-10 w-20 bg-[#0f0f0f] border-x-0 border-e-2 border-s-2 border-b-2 bottom-0 hover:w-[240px] group transition-all duration-500 ease-in-out overflow-auto
         [&::-webkit-scrollbar]:w-2 
         [&::-webkit-scrollbar]:h-2 
         [&::-webkit-scrollbar]:[z-index:1]
@@ -36,7 +36,7 @@ function PageNavbar() {
     >
       <ul className="flex flex-col p-2 h-full">
         <NavItem
-          endPoint={"/"}
+          endPoint={"/dashboard"}
           icon={"dashboard"}
           name={"Dashboard"}
           isActive={activeItem === "dashboard"}
@@ -44,43 +44,43 @@ function PageNavbar() {
         <NavItem
           endPoint={"/biodata"}
           icon={"person_book"}
-          name={"Biodata"}
+          name={"Biodata Santri"}
           isActive={activeItem === "biodata"}
         />
         <NavItem
           endPoint={"/classmember"}
           icon={"groups"}
-          name={"Kelas"}
+          name={"Anggota Kelas"}
           isActive={activeItem === "classmember"}
         />
         <NavItem
           endPoint={"/score/" + lastAcademicYearId}
-          icon={"grade"}
-          name={"Nilai"}
+          icon={"money"}
+          name={"Nilai Ujian"}
           isActive={activeItem === "score"}
         />
         <NavItem
           endPoint={"/attendance"}
           icon={"checklist_rtl"}
-          name={"Absensi"}
+          name={"Absensi Santri"}
           isActive={activeItem === "attendance"}
         />
         <NavItem
           endPoint={"/notes"}
           icon={"edit_note"}
-          name={"Catatan"}
+          name={"Catatan Walikelas"}
           isActive={activeItem === "notes"}
         />
         <NavItem
           endPoint={"/rapor"}
           icon={"book"}
-          name={"Rapor"}
+          name={"Rapor Santri"}
           isActive={activeItem === "rapor"}
         />
         <NavItem
           endPoint={"/setting"}
           icon={"settings"}
-          name={"Setting"}
+          name={"Pengaturan"}
           isActive={activeItem === "setting"}
         />
         <NavItem

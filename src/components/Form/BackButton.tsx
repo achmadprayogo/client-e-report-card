@@ -5,7 +5,7 @@ function BackButton() {
   return (
     <button
       onClick={() => navigate(-1)}
-      className="text-white absolute top-4 left-4"
+      className="text-white absolute top-4 left-4 "
     >
       <span className="material-symbols-outlined">arrow_back</span>
     </button>
