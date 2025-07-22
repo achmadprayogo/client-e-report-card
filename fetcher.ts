@@ -1,10 +1,10 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 function createAxiosJsonInstance() {
   return axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: 'http://localhost:3000',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 }
@@ -13,15 +13,15 @@ function getErrorType(error: AxiosError) {
   let errorType;
   if (axios.isAxiosError(error)) {
     if (error.response) {
-      errorType = "response";
-      console.log("Response error:", error.response.data);
+      errorType = 'response';
+      console.log('Response error:', error.response.data);
     } else if (error.request) {
-      errorType = "request";
+      errorType = 'request';
     } else {
-      errorType = "error";
+      errorType = 'error';
     }
   } else {
-    errorType = "error";
+    errorType = 'error';
   }
 
   return errorType;
@@ -58,7 +58,7 @@ export async function postData(url: string, data: any) {
 export async function patchData(url: string, data: any) {
   try {
     const axiosJson = createAxiosJsonInstance();
-    const response: AxiosResponse = await axiosJson.patch(url, data);
+    const response = await axiosJson.patch(url, data);
     return response;
   } catch (error) {
     return errorResponse(error as AxiosError);

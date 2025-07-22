@@ -4,12 +4,18 @@ import TitleInput from "./Form/TitleInput";
 import { useEffect } from "react";
 
 interface PopUpContainer {
+  title: string;
   children: React.ReactNode;
   isOpen: boolean;
   setIsOpen: () => void;
 }
 
-function PopUpContainer({ children, isOpen, setIsOpen }: PopUpContainer) {
+function PopUpContainer({
+  title,
+  children,
+  isOpen,
+  setIsOpen,
+}: PopUpContainer) {
   const rootElement = document.getElementById("root") as HTMLElement;
   useEffect(() => {
     if (isOpen) {
@@ -31,7 +37,7 @@ function PopUpContainer({ children, isOpen, setIsOpen }: PopUpContainer) {
           <div className="absolute top-4 right-4">
             <CloseButton onClick={handleClose} />
           </div>
-          <TitleInput>UPDATE CATATAN</TitleInput>
+          <TitleInput>{title}</TitleInput>
         </div>
         <hr className="w-full border-[#888888] " />
         {children}

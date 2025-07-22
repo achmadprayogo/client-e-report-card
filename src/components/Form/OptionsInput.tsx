@@ -1,5 +1,5 @@
-import { Options } from "../../../index";
-function OptionsInput({ options }: { options?: Options[] }) {
+import { Option } from '../../../index';
+function OptionsInput({ options }: { options?: Option[] }) {
   return (
     <>
       {options?.map((option, index) => (

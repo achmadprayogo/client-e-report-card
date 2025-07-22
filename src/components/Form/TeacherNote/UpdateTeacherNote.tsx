@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
-import TitleInput from "../TitleInput";
-import Input from "../Input";
-import CloseButton from "../../Button/CloseButton";
-import { AlertConfig, TeacherNote } from "../../../../index";
-import { initialAlert, initialTeacherNote } from "../../../../initialStates";
-import { patchData } from "../../../../fetcher";
-import { AxiosResponse } from "axios";
-import Alert from "../../Alert/Alert";
-import Helper from "../../../../Helper";
-import PopUpContainer from "../../../components/PopUpContainer";
-import ResetButton from "../../Button/ResetButton";
+import { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
+import Input from '../Input';
+import { AlertConfig, TeacherNote } from '../../../../index';
+import { initialAlert, initialTeacherNote } from '../../../../initialStates';
+import { patchData } from '../../../../fetcher';
+import { AxiosResponse } from 'axios';
+import Alert from '../../Alert/Alert';
+import Helper from '../../../../Helper';
+import PopUpContainer from '../../../components/PopUpContainer';
+import ResetButton from '../../Button/ResetButton';
 
 interface UpdateTeacherNote {
   selectedNode: TeacherNote;
@@ -18,26 +16,21 @@ interface UpdateTeacherNote {
   setIsOpen: () => void;
 }
 
-function UpdateTeacherNote({
-  selectedNode,
-  isOpen,
-  setIsOpen,
-}: UpdateTeacherNote) {
+function UpdateTeacherNote({ selectedNode, isOpen, setIsOpen }: UpdateTeacherNote) {
   const [isUpdate, setIsUpdate] = useState<boolean>(true);
   const [lastNote, setLastNote] = useState<TeacherNote>(initialTeacherNote);
   const [newNote, setNewNote] = useState<TeacherNote>(initialTeacherNote);
   const [alert, setAlert] = useState<AlertConfig>(initialAlert);
-  const [isPageRefresh, setIsPageRefresh] = useState<boolean>(false);
-  const rootElement = document.getElementById("root") as HTMLElement;
+  const rootElement = document.getElementById('root') as HTMLElement;
 
   useEffect(() => {
     setNewNote(selectedNode);
     setLastNote(selectedNode);
     if (isOpen) {
-      rootElement.classList.add("blur-md");
+      rootElement.classList.add('blur-md');
     }
     return () => {
-      rootElement.classList.remove("blur-md");
+      rootElement.classList.remove('blur-md');
     };
   }, [isOpen]);
 
@@ -51,14 +44,10 @@ function UpdateTeacherNote({
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await patchData(
-      "/api/admin/teacher-notes/update",
-      newNote
-    );
+    const response = await patchData('/api/admin/teacher-notes/update', newNote);
     switch (response.status) {
       case 200:
         setAlert(Helper.successAlert());
-        setIsPageRefresh(true);
         break;
       default:
         setAlert(Helper.errorAlert());
@@ -81,7 +70,7 @@ function UpdateTeacherNote({
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <PopUpContainer isOpen={isOpen} setIsOpen={handleClose}>
+    <PopUpContainer isOpen={isOpen} setIsOpen={handleClose} title="Update Catatan">
       <div className="absolute top-16 right-4 ">
         <ResetButton onClick={handleReset} />
       </div>
@@ -181,7 +170,7 @@ function UpdateTeacherNote({
         </div>
       </form>
     </PopUpContainer>,
-    document.body
+    document.body,
   );
 }
 

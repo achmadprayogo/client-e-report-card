@@ -1,5 +1,5 @@
 import ContentContainer from "../../ContentContainer";
-import BackButton from "../BackButton";
+import BackButton from "../../Button/BackButton";
 import TitleInput from "../TitleInput";
 import Alert from "../../Alert/Alert";
 import ToolbarContainer from "../../Toolbar/ToolbarContainer";

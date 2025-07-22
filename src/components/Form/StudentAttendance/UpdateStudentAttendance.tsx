@@ -89,7 +89,11 @@ function UpdateStudentAttendance({
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <PopUpContainer isOpen={isOpen} setIsOpen={handleClose}>
+    <PopUpContainer
+      isOpen={isOpen}
+      setIsOpen={handleClose}
+      title="Update Absensi"
+    >
       <div className="absolute top-16 right-4 ">
         <ResetButton onClick={handleReset} />
       </div>

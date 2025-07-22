@@ -1,45 +1,34 @@
-import ContentContainer from "../ContentContainer";
-import ToolbarContainer from "../Toolbar/ToolbarContainer";
-import ToolbarItem from "../Toolbar/ToolbarItem";
-import Search from "../Toolbar/Search";
-import TableContainer from "./TableContainer";
-import TableHeader from "./TableHeader";
-import TableData from "./TableData";
-import TablePagination from "./TablePagination";
-import { useEffect, useState } from "react";
-import { getData } from "../../../fetcher";
-import { useParams } from "react-router";
-import { DataFetch, Options, AttendanceData } from "../../../index";
-import Helper from "../../../Helper";
-import OptionsInput from "../Form/OptionsInput";
-import {
-  initialDataFetch,
-  initialOptions,
-  initialAttendanceData,
-} from "../../../initialStates";
-import UpdateStudentAttendance from "../Form/StudentAttendance/UpdateStudentAttendance";
+import ContentContainer from '../ContentContainer';
+import ToolbarContainer from '../Toolbar/ToolbarContainer';
+import ToolbarItem from '../Toolbar/ToolbarItem';
+import Search from '../Toolbar/Search';
+import TableContainer from '../Table/TableContainer';
+import TableHeader from '../Table/TableHeader';
+import TableData from '../Table/TableData';
+import TablePagination from './Pagination';
+import { useEffect, useState } from 'react';
+import { getData } from '../../../fetcher';
+import { useParams } from 'react-router';
+import { Response, Option, AttendanceData } from '../../../index';
+import Helper from '../../../Helper';
+import OptionsInput from '../Form/OptionsInput';
+import { initialResponse, initialOptions, initialAttendanceData } from '../../../initialStates';
+import UpdateStudentAttendance from '../Form/StudentAttendance/UpdateStudentAttendance';
 
-function TableStudentAttendance() {
-  const academicYearSelected = useParams().academic_year_id || "";
-  const [response, setResponse] = useState<DataFetch>(initialDataFetch);
-  const [className, setClassName] = useState<string>("");
-  const [gradeClass, setGradeClass] = useState<string>("");
-  const [quarter, setQuarter] = useState<string>("");
-  const [search, setSearch] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<string>("");
-  const [gradeClassOptions, setGradeClassOptions] =
-    useState<Options[]>(initialOptions);
-  const [classNameOptions, setClassNameOptions] =
-    useState<Options[]>(initialOptions);
-  const [quarterOptions, setQuarterOptions] =
-    useState<Options[]>(initialOptions);
-  const [attendanceData, setAttendanceData] = useState<AttendanceData[]>([
-    initialAttendanceData,
-  ]);
-  const [selectedData, setSelectedData] = useState<AttendanceData>(
-    initialAttendanceData
-  );
+function PageStudentAttendance() {
+  const academicYearSelected = useParams().academic_year_id || '';
+  const [response, setResponse] = useState<Response>(initialResponse);
+  const [className, setClassName] = useState<string>('');
+  const [gradeClass, setGradeClass] = useState<string>('');
+  const [quarter, setQuarter] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<string>('');
+  const [gradeClassOptions, setGradeClassOptions] = useState<Option[]>(initialOptions);
+  const [classNameOptions, setClassNameOptions] = useState<Option[]>(initialOptions);
+  const [quarterOptions, setQuarterOptions] = useState<Option[]>(initialOptions);
+  const [attendanceData, setAttendanceData] = useState<AttendanceData[]>([initialAttendanceData]);
+  const [selectedData, setSelectedData] = useState<AttendanceData>(initialAttendanceData);
   const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
   async function fetchAttendance() {
     const pageQuery = `page[number]=${1}&page[size]=${20}`;
@@ -54,43 +43,27 @@ function TableStudentAttendance() {
     setResponse(response);
     const formatedData: AttendanceData[] = Helper.formatAttendanceData(
       response.data,
-      response.included
+      response.included,
     );
     setAttendanceData(formatedData);
   }
   useEffect(() => {
     fetchAttendance();
-  }, [
-    search,
-    academicYearSelected,
-    gradeClass,
-    className,
-    quarter,
-    sortBy,
-    sortOrder,
-  ]);
+  }, [search, academicYearSelected, gradeClass, className, quarter, sortBy, sortOrder]);
 
   useEffect(() => {
     async function fetchGradeOptions() {
-      let result = await Helper.getGradeOptions(academicYearSelected);
-      result = [...result, { label: "Semua", value: "" }];
-      const options = Helper.setIndexOptionSelected(
-        result,
-        result.length - 1,
-        true
-      );
+      let result = await Helper.getGradeClassOptions(academicYearSelected);
+      result = [...result, { label: 'Semua', value: '' }];
+      const options = Helper.setIndexOptionSelected(result, result.length - 1, true);
       setGradeClassOptions(options);
     }
     async function fetchQuarterOptions() {
       const result = await Helper.getQuarterOptions(academicYearSelected);
-      const options = Helper.setIndexOptionSelected(
-        result,
-        result.length - 1,
-        true
-      );
+      const options = Helper.setIndexOptionSelected(result, result.length - 1, true);
       setQuarterOptions(options);
     }
-    if (academicYearSelected !== "") {
+    if (academicYearSelected !== '') {
       fetchGradeOptions();
       fetchQuarterOptions();
     }
@@ -103,14 +76,10 @@ function TableStudentAttendance() {
     setGradeClass(e.target.value);
     async function fetchOptions() {
       const result = await Helper.getClassNameOptions(e.target.value);
-      const options = Helper.setIndexOptionSelected(
-        result,
-        result.length - 1,
-        true
-      );
+      const options = Helper.setIndexOptionSelected(result, result.length - 1, true);
       setClassNameOptions(options);
     }
-    if (e.target.value !== "") {
+    if (e.target.value !== '') {
       fetchOptions();
     }
   };
@@ -131,7 +100,7 @@ function TableStudentAttendance() {
       setResponse(result);
       const data: AttendanceData[] = Helper.formatAttendanceData(
         result.data,
-        result.included
+        result.included,
       ) as AttendanceData[];
       setAttendanceData(data);
     }
@@ -149,7 +118,7 @@ function TableStudentAttendance() {
         setIsOpen={handlePopupClose}
       />
       <ToolbarContainer>
-        <ToolbarItem icon="description">{`${response.meta.page.total} Data Absen`}</ToolbarItem>
+        <ToolbarItem icon="description">{`${response.meta.page.total} Data Absensi`}</ToolbarItem>
         <Search onSearch={handleSearch} />
         {academicYearSelected && (
           <>
@@ -220,7 +189,7 @@ function TableStudentAttendance() {
                 <TableData>{data.fullname}</TableData>
                 <TableData>{data.grade_class}</TableData>
                 <TableData>{data.class_name}</TableData>
-                <TableData>{"Ust. " + data.homeroom_teacher}</TableData>
+                <TableData>{'Ust. ' + data.homeroom_teacher}</TableData>
                 <TableData>{data.quarter_academic_year}</TableData>
                 <TableData>{data.total_sicks}</TableData>
                 <TableData>{data.total_permissions}</TableData>
@@ -240,4 +209,4 @@ function TableStudentAttendance() {
   );
 }
 
-export default TableStudentAttendance;
+export default PageStudentAttendance;

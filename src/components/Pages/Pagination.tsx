@@ -1,16 +1,16 @@
-interface TablePaginationProps {
+interface PagingationProps {
   currentPage: number;
   totalPages: number;
   onPageNext: () => void;
   onPagePrev: () => void;
 }
 
-function TablePagination({
+function Pagingation({
   currentPage,
   totalPages,
   onPageNext,
   onPagePrev,
-}: TablePaginationProps) {
+}: PagingationProps) {
   return (
     <div className="flex items-center justify-between mt-4 border rounded-xl">
       <button
@@ -40,4 +40,4 @@ function TablePagination({
   );
 }
 
-export default TablePagination;
+export default Pagingation;

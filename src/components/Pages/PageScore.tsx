@@ -1,93 +1,77 @@
-import ContentContainer from "../ContentContainer";
-import ToolbarContainer from "../Toolbar/ToolbarContainer";
-import ToolbarItem from "../Toolbar/ToolbarItem";
-import Search from "../Toolbar/Search";
-import TableContainer from "./TableContainer";
-import TableHeader from "./TableHeader";
-import TableData from "./TableData";
-import TablePagination from "./TablePagination";
-import { useEffect, useState } from "react";
-import { getData } from "../../../fetcher";
-import { useParams } from "react-router";
-import { DataFetch, Options, StudentScore, Subject } from "../../../index";
-import Helper from "../../../Helper";
-import OptionsInput from "../Form/OptionsInput";
-import { initialDataFetch } from "../../../initialStates";
-import { useNavigate } from "react-router";
+import { useParams } from 'react-router';
+import { useNavigate } from 'react-router';
+import { getData } from '../../../fetcher';
+import { useEffect, useState } from 'react';
+import { Response, Option, StudentScore, Subject } from '../../../index';
+import { initialResponse, initialStudentScore } from '../../../initialStates';
+import TableData from '../Table/TableData';
+import Helper from '../../../Helper';
+import Search from '../Toolbar/Search';
+import TableHeader from '../Table/TableHeader';
+import TablePagination from './Pagination';
+import TableContainer from '../Table/TableContainer';
+import OptionsInput from '../Form/OptionsInput';
+import ToolbarItem from '../Toolbar/ToolbarItem';
+import ContentContainer from '../ContentContainer';
+import ToolbarContainer from '../Toolbar/ToolbarContainer';
+import ScoreUpdate from '../Form/Score/ScoreUpdate';
 
-function TableScore() {
-  const academicYearSelected = useParams().academic_year_id || "";
-  const [gradeClassOptions, setGradeClassOptions] = useState<Options[]>([]);
-  const [classNameOptions, setClassNameOptions] = useState<Options[]>([]);
-  const [quarterOptions, setQuarterOptions] = useState<Options[]>([]);
-  const [gradeClass, setGradeClass] = useState<string>("");
-  const [quarter, setQuarter] = useState<string>("");
-  const [className, setClassName] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("fullname");
-  const [sortOrder, setSortOrder] = useState<string>("asc");
-  const [search, setSearch] = useState<string>("");
+function PageScore() {
+  const academicYearSelected = useParams().academic_year_id || '';
+  const [search, setSearch] = useState<string>('');
+  const [quarter, setQuarter] = useState<string>('');
+  const [className, setClassName] = useState<string>('');
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [gradeClass, setGradeClass] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('fullname');
+  const [sortOrder, setSortOrder] = useState<string>('asc');
+  const [quarterOptions, setQuarterOptions] = useState<Option[]>([]);
   const [studentScores, setStudentScores] = useState<StudentScore[]>([]);
-  const [responseFetch, setResponseFetch] = useState<DataFetch>(initialDataFetch); // prettier-ignore
+  const [classNameOptions, setClassNameOptions] = useState<Option[]>([]);
+  const [gradeClassOptions, setGradeClassOptions] = useState<Option[]>([]);
+  const [responseFetch, setResponseFetch] = useState<Response>(initialResponse);
+  const [isPageUpdateOpen, setIsPageUpdateOpen] = useState<boolean>(false);
+  const [selectedData, setSelectedData] = useState<StudentScore>(initialStudentScore);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getDataScores() {
-      const pageQuery = `page[number]=${1}&page[size]=${20}`;
       const searchQuery = `search=${search}`;
-      const academicYearQuery = `filter[academic_year_id]=${academicYearSelected}`;
+      const pageQuery = `page[number]=${1}&page[size]=${20}`;
       const classNameQuery = `filter[class_name_id]=${className}`;
       const gradeClassQuery = `filter[grade_class_id]=${gradeClass}`;
-      const quarterQuery = `filter[quarter_academic_year_id]=${quarter}`;
       const sortQuery = `sort[by]=${sortBy}&sort[order]=${sortOrder}`;
-      const URL = `/api/admin/classmember-scores?${pageQuery}&${searchQuery}&${academicYearQuery}&${quarterQuery}&${classNameQuery}&${gradeClassQuery}&${sortQuery}`;
+      const quarterQuery = `filter[quarter_academic_year_id]=${quarter}`;
+      const academicYearQuery = `filter[academic_year_id]=${academicYearSelected}`;
+      const URL = `/api/admin/class-member-scores?${pageQuery}&${searchQuery}&${academicYearQuery}&${quarterQuery}&${classNameQuery}&${gradeClassQuery}&${sortQuery}`;
+
       const response = await getData(URL);
       setResponseFetch(response);
 
       const result: StudentScore[] = Helper.formatScore(
         response.data,
-        response.included
+        response.included,
       ) as StudentScore[];
-      console.log(result[0], result[1], result[2]);
+
       setStudentScores(result);
+
       // get subjects
       const subjects = Helper.getSubjects(response.included);
-      console.log(subjects);
       setSubjects(subjects);
     }
     getDataScores();
   }, [academicYearSelected, gradeClass, className, quarter, search]);
 
   useEffect(() => {
-    async function fetchGradeOptions() {
-      let result = await Helper.getGradeOptions(academicYearSelected);
-      const options = Helper.setIndexOptionSelected(result, 1, true);
-
-      setGradeClass(result[1].value);
-      setGradeClassOptions(options);
-    }
-    async function fetchQuarterOptions() {
-      let result = await Helper.getQuarterOptions(academicYearSelected);
-      result = [...result, { label: "Semua", value: "" }];
-      const options = Helper.setIndexOptionSelected(
-        result,
-        result.length - 1,
-        true
-      );
-      setQuarterOptions(options);
-    }
-    if (academicYearSelected !== "") {
+    if (academicYearSelected !== '') {
       fetchGradeOptions();
       fetchQuarterOptions();
     }
   }, [academicYearSelected]);
 
   useEffect(() => {
-    async function fetchOptions() {
-      const result = await Helper.getClassNameOptions(gradeClass);
-      setClassNameOptions([...result, { label: "Semua", value: "" }]);
-    }
-    if (gradeClass !== "") {
+    if (gradeClass !== '') {
       fetchOptions();
     }
   }, [gradeClass]);
@@ -103,7 +87,7 @@ function TableScore() {
       setResponseFetch(result);
       const data: StudentScore[] = Helper.formatScore(
         result.data,
-        result.included
+        result.included,
       ) as StudentScore[];
       setStudentScores(data);
     }
@@ -116,7 +100,7 @@ function TableScore() {
       setResponseFetch(result);
       const data: StudentScore[] = Helper.formatScore(
         result.data,
-        result.included
+        result.included,
       ) as StudentScore[];
       setStudentScores(data);
     }
@@ -130,23 +114,22 @@ function TableScore() {
   const handleQuarterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setQuarter(e.target.value);
   };
-  const handleDoubleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const id = (e.target as HTMLElement).parentElement?.id.split("#")[0];
-    const quarterAcademicYearId = (
-      e.target as HTMLElement
-    ).parentElement?.id.split("#")[1];
-    console.log(id);
-    navigate(
-      `/score/update?id=${id}&quarter_academic_year_id=${quarterAcademicYearId}`
-    );
+  const handleDoubleClick = (data: StudentScore) => {
+    console.log(data);
+    setSelectedData(data);
+    setIsPageUpdateOpen(true);
   };
   const handleClickInput = () => {
-    navigate("/score/input");
+    navigate('/score/input');
   };
 
   return (
     <ContentContainer direction="column">
+      <ScoreUpdate
+        isOpen={isPageUpdateOpen}
+        setIsOpen={() => setIsPageUpdateOpen(false)}
+        selectedData={selectedData}
+      />
       <ToolbarContainer>
         <ToolbarItem icon="description">{`${responseFetch.meta.page.total} Data Nilai`}</ToolbarItem>
         <Search onSearch={handleSearch} />
@@ -202,9 +185,7 @@ function TableScore() {
               <TableHeader>Cawu</TableHeader>
               <TableHeader>KKM</TableHeader>
               {subjects.map((subject) => (
-                <TableHeader key={subject.id}>
-                  {Helper.capitalizeWords(subject.name)}
-                </TableHeader>
+                <TableHeader key={subject.id}>{Helper.capitalizeWords(subject.name)}</TableHeader>
               ))}
               <TableHeader>Total</TableHeader>
               <TableHeader>Rata-rata</TableHeader>
@@ -215,25 +196,21 @@ function TableScore() {
             {studentScores.map((data, index) => (
               <tr
                 key={index}
-                id={data.id + "#" + data.quarter_academic_year_id}
+                id={data.id + '#' + data.quarter_academic_year_id}
                 className="hover:bg-gray-700"
-                onDoubleClick={handleDoubleClick}
+                onDoubleClick={() => handleDoubleClick(data)}
               >
                 <TableData>{index + responseFetch.meta.page.from}</TableData>
                 <TableData>{data.nis}</TableData>
                 <TableData>{data.fullname}</TableData>
                 <TableData>{data.grade_class}</TableData>
                 <TableData>{data.class_name}</TableData>
-                <TableData>{"Ust. " + data.homeroom_teacher}</TableData>
+                <TableData>{'Ust. ' + data.homeroom_teacher}</TableData>
                 <TableData>{data.quarter_academic_year}</TableData>
-                <TableData>{data.MMC_score}</TableData>
+                <TableData>{data.quarter_standart_score}</TableData>
                 {subjects.map((subject) => (
                   <TableData key={subject.id}>
-                    {
-                      data.scores.find(
-                        (score) => score.subject_id === subject.id
-                      )?.score
-                    }
+                    {data.scores.find((score) => score.subject_id === subject.id)?.score}
                   </TableData>
                 ))}
                 <TableData>{data.total_score}</TableData>
@@ -252,6 +229,26 @@ function TableScore() {
       />
     </ContentContainer>
   );
+
+  async function fetchGradeOptions() {
+    let result = await Helper.getGradeClassOptions(academicYearSelected);
+    result.pop();
+    const options = Helper.setIndexOptionSelected(result, 1, true);
+    setGradeClass(result[1].value);
+    setGradeClassOptions(options);
+  }
+  async function fetchQuarterOptions() {
+    let result = await Helper.getQuarterOptions(academicYearSelected);
+    result.pop();
+    result = [...result, { label: 'Semua', value: '' }];
+    const options = Helper.setIndexOptionSelected(result, result.length - 1, true);
+    setQuarterOptions(options);
+  }
+  async function fetchOptions() {
+    const result = await Helper.getClassNameOptions(gradeClass);
+    result.pop();
+    setClassNameOptions([...result, { label: 'Semua', value: '' }]);
+  }
 }
 
-export default TableScore;
+export default PageScore;

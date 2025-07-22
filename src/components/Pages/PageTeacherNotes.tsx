@@ -1,43 +1,35 @@
-import ContentContainer from "../ContentContainer";
-import ToolbarContainer from "../Toolbar/ToolbarContainer";
-import ToolbarItem from "../Toolbar/ToolbarItem";
-import Search from "../Toolbar/Search";
-import TableContainer from "./TableContainer";
-import TableHeader from "./TableHeader";
-import TableData from "./TableData";
-import TablePagination from "./TablePagination";
-import React, { useEffect, useState } from "react";
-import { getData } from "../../../fetcher";
-import { useParams } from "react-router";
-import { DataFetch, Options, TeacherNote } from "../../../index";
-import Helper from "../../../Helper";
-import OptionsInput from "../Form/OptionsInput";
-import {
-  initialDataFetch,
-  initialOptions,
-  initialTeacherNote,
-} from "../../../initialStates";
-import UpdateTeacherNote from "../Form/TeacherNote/UpdateTeacherNote";
+import ContentContainer from '../ContentContainer';
+import ToolbarContainer from '../Toolbar/ToolbarContainer';
+import ToolbarItem from '../Toolbar/ToolbarItem';
+import Search from '../Toolbar/Search';
+import TableContainer from '../Table/TableContainer';
+import TableHeader from '../Table/TableHeader';
+import TableData from '../Table/TableData';
+import TablePagination from './Pagination';
+import React, { useEffect, useState } from 'react';
+import { getData } from '../../../fetcher';
+import { useParams } from 'react-router';
+import { Response, Option, TeacherNote } from '../../../index';
+import Helper from '../../../Helper';
+import OptionsInput from '../Form/OptionsInput';
+import { initialResponse, initialOptions, initialTeacherNote } from '../../../initialStates';
+import UpdateTeacherNote from '../Form/TeacherNote/UpdateTeacherNote';
 
-function TableTeacherNotes() {
-  const academicYearSelected = useParams().academic_year_id || "";
-  const [response, setResponse] = useState<DataFetch>(initialDataFetch);
+function PageTeacherNotes() {
+  const academicYearSelected = useParams().academic_year_id || '';
+  const [response, setResponse] = useState<Response>(initialResponse);
   const [notes, setNotes] = useState<TeacherNote[]>([]);
-  const [gradeClass, setGradeClass] = useState<string>("");
-  const [quarter, setQuarter] = useState<string>("");
-  const [gradeClassOptions, setGradeClassOptions] =
-    useState<Options[]>(initialOptions);
-  const [classNameOptions, setClassNameOptions] =
-    useState<Options[]>(initialOptions);
-  const [quarterOptions, setQuarterOptions] =
-    useState<Options[]>(initialOptions);
-  const [className, setClassName] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<string>("");
-  const [search, setSearch] = useState<string>("");
+  const [gradeClass, setGradeClass] = useState<string>('');
+  const [quarter, setQuarter] = useState<string>('');
+  const [gradeClassOptions, setGradeClassOptions] = useState<Option[]>(initialOptions);
+  const [classNameOptions, setClassNameOptions] = useState<Option[]>(initialOptions);
+  const [quarterOptions, setQuarterOptions] = useState<Option[]>(initialOptions);
+  const [className, setClassName] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
   const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
-  const [selectedNote, setSelectedNote] =
-    useState<TeacherNote>(initialTeacherNote);
+  const [selectedNote, setSelectedNote] = useState<TeacherNote>(initialTeacherNote);
 
   async function fetchTeacherNotes() {
     const pageQuery = `page[number]=${1}&page[size]=${20}`;
@@ -56,37 +48,21 @@ function TableTeacherNotes() {
   }
   useEffect(() => {
     fetchTeacherNotes();
-  }, [
-    search,
-    academicYearSelected,
-    gradeClass,
-    className,
-    quarter,
-    sortBy,
-    sortOrder,
-  ]);
+  }, [search, academicYearSelected, gradeClass, className, quarter, sortBy, sortOrder]);
 
   useEffect(() => {
     async function fetchGradeOptions() {
-      let result = await Helper.getGradeOptions(academicYearSelected);
-      result = [...result, { label: "Semua", value: "" }];
-      const options = Helper.setIndexOptionSelected(
-        result,
-        result.length - 1,
-        true
-      );
+      let result = await Helper.getGradeClassOptions(academicYearSelected);
+      result = [...result, { label: 'Semua', value: '' }];
+      const options = Helper.setIndexOptionSelected(result, result.length - 1, true);
       setGradeClassOptions(options);
     }
     async function fetchQuarterOptions() {
       const result = await Helper.getQuarterOptions(academicYearSelected);
-      const options = Helper.setIndexOptionSelected(
-        result,
-        result.length - 1,
-        true
-      );
+      const options = Helper.setIndexOptionSelected(result, result.length - 1, true);
       setQuarterOptions(options);
     }
-    if (academicYearSelected !== "") {
+    if (academicYearSelected !== '') {
       fetchGradeOptions();
       fetchQuarterOptions();
     }
@@ -99,14 +75,10 @@ function TableTeacherNotes() {
     setGradeClass(e.target.value);
     async function fetchOptions() {
       const result = await Helper.getClassNameOptions(e.target.value);
-      const options = Helper.setIndexOptionSelected(
-        result,
-        result.length - 1,
-        true
-      );
+      const options = Helper.setIndexOptionSelected(result, result.length - 1, true);
       setClassNameOptions(options);
     }
-    if (e.target.value !== "") {
+    if (e.target.value !== '') {
       fetchOptions();
     }
   };
@@ -126,10 +98,7 @@ function TableTeacherNotes() {
 
     if (result) {
       setResponse(result);
-      const data: TeacherNote[] = Helper.formatNotes(
-        result.data,
-        result.included
-      ) as TeacherNote[];
+      const data: TeacherNote[] = Helper.formatNotes(result.data, result.included) as TeacherNote[];
       setNotes(data);
     }
   };
@@ -138,17 +107,14 @@ function TableTeacherNotes() {
 
     if (result) {
       setResponse(result);
-      const data: TeacherNote[] = Helper.formatNotes(
-        result.data,
-        result.included
-      ) as TeacherNote[];
+      const data: TeacherNote[] = Helper.formatNotes(result.data, result.included) as TeacherNote[];
       setNotes(data);
     }
   };
   const handleShort = (e: React.MouseEvent<HTMLTableCellElement>) => {
     const target = e.target as HTMLTableCellElement;
     setSortBy(target.id);
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
   const handlePopupClose = () => {
     setIsOpenPopup(false);
@@ -210,7 +176,7 @@ function TableTeacherNotes() {
               <TableHeader>No</TableHeader>
               <TableHeader
                 id="academic_year"
-                filter={sortBy === "academic_year"}
+                filter={sortBy === 'academic_year'}
                 onClick={handleShort}
                 order={sortOrder}
               >
@@ -219,7 +185,7 @@ function TableTeacherNotes() {
               <TableHeader>NIS</TableHeader>
               <TableHeader
                 id="fullname"
-                filter={sortBy === "fullname"}
+                filter={sortBy === 'fullname'}
                 onClick={handleShort}
                 order={sortOrder}
               >
@@ -227,7 +193,7 @@ function TableTeacherNotes() {
               </TableHeader>
               <TableHeader
                 id="grade_class"
-                filter={sortBy === "grade_class"}
+                filter={sortBy === 'grade_class'}
                 onClick={handleShort}
                 order={sortOrder}
               >
@@ -235,7 +201,7 @@ function TableTeacherNotes() {
               </TableHeader>
               <TableHeader
                 id="class_name"
-                filter={sortBy === "class_name"}
+                filter={sortBy === 'class_name'}
                 onClick={handleShort}
                 order={sortOrder}
               >
@@ -244,7 +210,7 @@ function TableTeacherNotes() {
               <TableHeader>Wali Kelas</TableHeader>
               <TableHeader
                 id="quarter_academic_year"
-                filter={sortBy === "quarter_academic_year"}
+                filter={sortBy === 'quarter_academic_year'}
                 onClick={handleShort}
                 order={sortOrder}
               >
@@ -267,7 +233,7 @@ function TableTeacherNotes() {
                 <TableData>{note.fullname}</TableData>
                 <TableData>{note.grade_class}</TableData>
                 <TableData>{note.class_name}</TableData>
-                <TableData>{"Ust. " + note.homeroom_teacher}</TableData>
+                <TableData>{'Ust. ' + note.homeroom_teacher}</TableData>
                 <TableData>{note.quarter_academic_year}</TableData>
                 <TableData wrapText={true}>{note.note}</TableData>
               </tr>
@@ -285,4 +251,4 @@ function TableTeacherNotes() {
   );
 }
 
-export default TableTeacherNotes;
+export default PageTeacherNotes;

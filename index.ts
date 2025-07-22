@@ -1,5 +1,16 @@
-export interface DataFetch {
-  data: [];
+export interface Response {
+  data: {
+    id: string;
+    type: string;
+    attributes: Object;
+    relationships?: Object;
+  }[];
+  included: {
+    id: string;
+    type: string;
+    attributes: Object;
+    relationships?: Object;
+  }[];
   meta: {
     page: {
       current_page: number;
@@ -11,9 +22,15 @@ export interface DataFetch {
   };
   links: {
     first: string;
+    self: string;
     last: string;
     next: string;
     prev: string;
+  };
+  error?: {
+    status: number;
+    title: string;
+    detail: string;
   };
 }
 
@@ -22,10 +39,12 @@ export interface Student {
   nis: string;
   fullname: string;
   city_of_birth: string;
-  birthdate: Date;
+  birthdate: string;
+  age?: number;
   father_name: string;
   mother_name: string;
   guardian_name: string;
+  student_status?: StudentStatus;
   address: string;
 }
 
@@ -60,7 +79,7 @@ export interface StudentScore {
   homeroom_teacher: string;
   quarter_academic_year_id: string;
   quarter_academic_year: string;
-  MMC_score: number; // Minimum Completeness Criteria
+  quarter_standart_score: number; // Minimum Completeness Criteria
   scores: Score[];
   total_score?: number;
   average_score?: number;
@@ -92,15 +111,16 @@ export interface TeacherNote {
 }
 
 export enum StudentStatus {
-  ACTIVE = "active",
-  GRADUATE = "graduate",
-  DROPOUT = "dropout",
+  ACTIVE = 'active',
+  GRADUATE = 'graduate',
+  DROPOUT = 'dropout',
+  INVALID = 'invalid',
 }
 
 export enum AlertStatus {
-  DEFAULT = "default",
-  SUCCESS = "success",
-  ERROR = "error",
+  DEFAULT = 'default',
+  SUCCESS = 'success',
+  ERROR = 'error',
 }
 
 export interface AlertConfig {
@@ -141,11 +161,15 @@ export interface StudentDeleteProps {
   setFormData: (value: Student) => void;
 }
 
-export interface Options {
+export interface Option {
   label: string;
   value: string;
   selected?: boolean;
   disabled?: boolean;
+}
+
+export interface ClassNameOption extends Option {
+  homeroom_teacher: string;
 }
 
 export interface FormUpdateStudent {
@@ -169,7 +193,7 @@ export interface FormInputStudent {
   guardian_name: string;
   address: string;
   academic_year_id: string;
-  status: "active" | "dropout" | "graduate";
+  status: 'active' | 'dropout' | 'graduate';
   class_name_id: string;
 }
 
@@ -185,4 +209,78 @@ export interface AttendanceData {
   total_sicks: number;
   total_permissions: number;
   total_absences: number;
+}
+
+export interface AcademicYear {
+  id: string;
+  academic_year: string;
+  start_date: string;
+  end_date: string;
+  status: DateStatus;
+  head_master: string;
+}
+
+export enum DateStatus {
+  PAST = 'berlalu',
+  CURRENT = 'berjalan',
+  FUTURE = 'mendatang',
+  INVALID = 'tidak valid',
+}
+
+export interface QuarterAcademicYear {
+  id: string;
+  academic_year: string;
+  quarter_academic_year: number;
+  score_standart: number;
+  start_date: string;
+  end_date: string;
+  status: DateStatus;
+}
+
+export interface GradeClass {
+  id: string;
+  academic_year: string;
+  academic_year_status: DateStatus;
+  grade_class: string;
+}
+
+export interface ClassName {
+  id: string;
+  academic_year: string;
+  academic_year_status: DateStatus;
+  grade_class: string;
+  class_name: string;
+  homeroom_teacher: string;
+}
+
+export interface SubjectDetail {
+  id: string;
+  academic_year: string;
+  academic_year_status: DateStatus;
+  grade_class: string;
+  subject_name: string;
+}
+
+export interface ClassMemberSetting
+  extends Pick<
+    ClassMember,
+    'id' | 'nis' | 'fullname' | 'academic_year' | 'grade_class' | 'class_name' | 'homeroom_teacher'
+  > {
+  student_id: string;
+  academic_year_status: DateStatus;
+  next_academic_year: string;
+  next_academic_year_id: string;
+  next_academic_year_status: DateStatus;
+  next_grade_class: string;
+  next_class_name: string;
+  next_homeroom_teacher: string;
+  status_action?: StatusAction;
+  next_class_name_id: string;
+}
+
+export enum StatusAction {
+  SUCCESS = 'success',
+  ERROR = 'error',
+  WARNING = 'warning',
+  WAITING = 'waiting',
 }
